@@ -1,0 +1,20 @@
+{
+  "name": "qa-automation-architecture",
+  "version": "1.0.0",
+  "description": "Playwright ve Cucumber (BDD) kullanılarak oluşturulmuş, SOLID prensiplerine dayalı uçtan uca (E2E) test otomasyon mimarisi.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^12.9.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^7.0.2"
+  }
+}
