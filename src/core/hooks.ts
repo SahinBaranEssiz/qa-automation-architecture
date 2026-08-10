@@ -1,38 +1,33 @@
-import { Before, After, BeforeAll, AfterAll, Status } from "@cucumber/cucumber";
-import { Browser, chromium } from "@playwright/test";
-import { CustomWorld } from "./customWorld";
+import { Before, After, BeforeAll, AfterAll, setDefaultTimeout } from '@cucumber/cucumber';
+import { chromium, Browser } from '@playwright/test';
+import { CustomWorld } from './customWorld';
+
+// 1. Kriz Çözümü: Cucumber'ın 5 saniyelik limitini 60 saniyeye çıkarıyoruz
+setDefaultTimeout(60 * 1000);
 
 let browser: Browser;
 
-// Tüm testlerden önce SADECE BİR KERE çalışır. Tarayıcı motorunu başlatır.
 BeforeAll(async function () {
-    browser = await chromium.launch({
-        headless: false, // Şimdilik false yapıyoruz ki test koşarken tarayıcıyı görelim
-        slowMo: 50, // İsteğe bağlı: Aksiyonları hafif yavaşlatır, görmemizi kolaylaştırır
+    // 2. Kriz Çözümü: Tarayıcıyı GÖRÜNÜR (headless: false) olarak başlatıyoruz
+    browser = await chromium.launch({ 
+        headless: false, // Ekranda tarayıcıyı görmemizi sağlar
+        args: ['--start-maximized'] // Tarayıcıyı tam ekran açar
     });
 });
 
-// HER SENARYODAN ÖNCE çalışır. Taptaze bir sekme (page) açar.
 Before(async function (this: CustomWorld) {
-    this.context = await browser.newContext();
+    // Her senaryodan önce tertemiz bir gizli sekme (context) ve sayfa oluşturuyoruz
+    this.context = await browser.newContext({ viewport: null });
     this.page = await this.context.newPage();
 });
 
-// HER SENARYODAN SONRA çalışır. O senaryonun sekmesini (page) kapatır.
-After(async function (this: CustomWorld, scenario) {
-    // Eğer test başarısız olduysa ekran görüntüsü alıp rapora ekleme mantığını ileride buraya kuracağız!
-    
-    if (this.page) {
-        await this.page.close();
-    }
-    if (this.context) {
-        await this.context.close();
-    }
+After(async function (this: CustomWorld) {
+    // Test bitince arkamızda çöp bırakmıyoruz (İzolasyon)
+    await this.page?.close();
+    await this.context?.close();
 });
 
-// Tüm testler bittikten sonra SADECE BİR KERE çalışır. Tarayıcı motorunu tamamen kapatır.
 AfterAll(async function () {
-    if (browser) {
-        await browser.close();
-    }
+    // Tüm testler bitince tarayıcıyı tamamen kapatıyoruz
+    await browser?.close();
 });
