@@ -11,9 +11,11 @@ export class HomePage {
     }
 
     async navigateToHome() {
-        await this.page.goto('https://automationexercise.com/');
-        // Dinamik Bekleme: Ağdaki (Network) tüm isteklerin bitmesini bekler. Hard wait yok!
-        await this.page.waitForLoadState('networkidle');
+        // YENİ: Sadece HTML (DOM) yüklendiğinde testi devam ettir ve limiti 60 saniyeye çıkar.
+        await this.page.goto('https://automationexercise.com/', { 
+            waitUntil: 'domcontentloaded', 
+            timeout: 60000 
+        });
     }
 
     async clickSignupLoginButton() {
