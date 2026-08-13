@@ -12,6 +12,8 @@ export class LoginPage {
     private accountDeletedHeader = 'h2[data-qa="account-deleted"]';
     private logoutLink = 'a[href="/logout"]';
     private continueButton = '[data-qa="continue-button"]';
+    // Sitenin giriş formundaki hata mesajı genelde formun içindeki kırmızı bir 'p' etiketidir.
+    private loginErrorMessage = 'form[action="/login"] p';
 
     constructor(page: Page) {
         this.page = page;
@@ -47,5 +49,11 @@ export class LoginPage {
         await expect(deleteMessage).toBeVisible();
         await expect(deleteMessage).toHaveText('Account Deleted!');
         await this.page.click(this.continueButton);
+    }
+
+    async verifyLoginError() {
+        const errorText = this.page.locator(this.loginErrorMessage);
+        await expect(errorText).toBeVisible();
+        await expect(errorText).toContainText('Your email or password is incorrect!');
     }
 }

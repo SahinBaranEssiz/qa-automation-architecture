@@ -28,7 +28,14 @@ Given('A brand new user account is created and logged out', async function (this
 });
 
 Given('The user is on the Automation Exercise login page', async function (this: CustomWorld) {
+    const homePage = new HomePage(this.page!);
     const loginPage = new LoginPage(this.page!);
+
+    // Eksik olan navigasyon (yönlendirme) komutlarını ekliyoruz! Tarayıcıyı siteye götürüyoruz.
+    await homePage.navigateToHome();
+    await homePage.clickSignupLoginButton();
+
+    // Siteye gittikten sonra sayfanın yüklendiğini doğruluyoruz
     await loginPage.verifyLoginPageVisible();
 });
 
@@ -47,4 +54,14 @@ Then('The user deletes the account successfully', async function (this: CustomWo
     const loginPage = new LoginPage(this.page!);
     await loginPage.deleteAccount();
     await loginPage.verifyAccountDeleted();
+});
+
+When('The user tries to login with {string} and {string}', async function (this: CustomWorld, email: string, password: string) {
+    const loginPage = new LoginPage(this.page!);
+    await loginPage.login(email, password);
+});
+
+Then('The system should show the login error message', async function (this: CustomWorld) {
+    const loginPage = new LoginPage(this.page!);
+    await loginPage.verifyLoginError();
 });
