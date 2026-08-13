@@ -9,6 +9,8 @@ export class CustomWorld extends World {
     context?: BrowserContext;
     page?: Page;
     playwrightOptions?: PlaywrightTestOptions;
+    authService?: any;
+    userService?: any;
 
     constructor(options: IWorldOptions) {
         super(options);
