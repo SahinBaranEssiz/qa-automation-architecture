@@ -1,8 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber';
-import { CustomWorld } from '../core/customWorld';
-import { HomePage } from '../pages/HomePage';
-import { SignupPage } from '../pages/SignupPage';
-import { LoginPage } from '../pages/LoginPage';
+import { CustomWorld } from '../../core/customWorld';
+import { HomePage } from '../../pages/HomePage';
+import { SignupPage } from '../../pages/SignupPage';
+import { LoginPage } from '../../pages/LoginPage';
 
 // Test boyunca yaşayacak olan dinamik verilerimizi tuttuğumuz obje
 const testSession = {
@@ -64,4 +64,9 @@ When('The user tries to login with {string} and {string}', async function (this:
 Then('The system should show the login error message', async function (this: CustomWorld) {
     const loginPage = new LoginPage(this.page!);
     await loginPage.verifyLoginError();
+});
+
+Then('The browser should show a native validation warning on the email field', async function (this: CustomWorld) {
+    const loginPage = new LoginPage(this.page!);
+    await loginPage.verifyNativeValidationWarning();
 });

@@ -1,7 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { request } from '@playwright/test';
-import { CustomWorld } from '../core/customWorld';
-import { AuthService } from '../services/AuthService';
+import { CustomWorld } from '../../core/customWorld';
+import { AuthService } from '../../services/AuthService';
 
 // Test boyunca kullanılacak geçici kullanıcı verilerini tutuyoruz
 const apiPayload = {
@@ -20,7 +20,7 @@ When('A POST request is sent to the DummyJSON login endpoint', async function (t
     
     await authService.login(apiPayload.username, apiPayload.password);
     
-    this.authService = authService; 
+    this.authService = authService;
 });
 
 Then('The API response status code should be {int}', async function (this: CustomWorld, statusCode: number) {

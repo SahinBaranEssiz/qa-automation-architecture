@@ -1,7 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
-import { CustomWorld } from '../core/customWorld';
-import { HomePage } from '../pages/HomePage';
-import { SignupPage } from '../pages/SignupPage';
+import { CustomWorld } from '../../core/customWorld';
+import { HomePage } from '../../pages/HomePage';
+import { SignupPage } from '../../pages/SignupPage';
 
 // Random veri üretici (Mock Data) - İleride bunu utils klasörüne taşıyacağız
 const generateRandomEmail = () => `qa_lead_${Math.floor(Math.random() * 10000)}@test.com`;

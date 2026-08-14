@@ -1,8 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { request } from '@playwright/test';
-import { CustomWorld } from '../core/customWorld';
-import { AuthService, apiStorage } from '../services/AuthService';
-import { UserService } from '../services/UserService';
+import { CustomWorld } from '../../core/customWorld';
+import { AuthService, apiStorage } from '../../services/AuthService';
+import { UserService } from '../../services/UserService';
 
 Given('The user has successfully logged in and obtained a token', async function (this: CustomWorld) {
     // Harika bir QA Pratiği: Eğer token daha önceki bir testten kaldıysa tekrar login olmuyoruz (Zaman tasarrufu).

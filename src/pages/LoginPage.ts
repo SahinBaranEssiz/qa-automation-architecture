@@ -54,6 +54,12 @@ export class LoginPage {
     async verifyLoginError() {
         const errorText = this.page.locator(this.loginErrorMessage);
         await expect(errorText).toBeVisible();
-        await expect(errorText).toContainText('Your email or password is incorrect!');
+        await expect(errorText).toHaveText('Your email or password is incorrect!');
     }
+    async verifyNativeValidationWarning() {
+        const validationMessage = await this.page.locator(this.loginEmailInput).evaluate((el: HTMLInputElement) => el.validationMessage);
+        expect(validationMessage.length).toBeGreaterThan(0);
+        //console.log(`\n[INFO] HTML5 Browser Warning Encountered: "${validationMessage}"`);
+    }
+
 }
