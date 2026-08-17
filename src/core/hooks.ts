@@ -1,33 +1,42 @@
-import { Before, After, BeforeAll, AfterAll, setDefaultTimeout } from '@cucumber/cucumber';
-import { chromium, Browser } from '@playwright/test';
+import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
+import { chromium } from '@playwright/test';
 import { CustomWorld } from './customWorld';
 
-// 1. Kriz Çözümü: Cucumber'ın 5 saniyelik limitini 60 saniyeye çıkarıyoruz
+// Global timeout setup
 setDefaultTimeout(60 * 1000);
 
-let browser: Browser;
+Before(async function (this: CustomWorld, { pickle }) {
+    // Check if the current scenario has the '@api' tag
+    const isApiTest = pickle.tags.some((tag) => tag.name === '@api');
 
-BeforeAll(async function () {
-    // 2. Kriz Çözümü: Tarayıcıyı GÖRÜNÜR (headless: false) olarak başlatıyoruz
-    browser = await chromium.launch({ 
-        headless: false, // Ekranda tarayıcıyı görmemizi sağlar
-        args: ['--start-maximized'] // Tarayıcıyı tam ekran açar
+    if (isApiTest) {
+        // Skip browser initialization for API tests
+        console.log(`\n[INFO] Starting API test: ${pickle.name} (Browserless)`);
+        return;
+    }
+
+    // Initialize browser for UI tests
+    console.log(`\n[INFO] Starting UI test: ${pickle.name} (Launching Browser)`);
+    this.browser = await chromium.launch({
+        headless: false // UI tests will show the browser
     });
-});
-
-Before(async function (this: CustomWorld) {
-    // Her senaryodan önce tertemiz bir gizli sekme (context) ve sayfa oluşturuyoruz
-    this.context = await browser.newContext({ viewport: null });
+    this.context = await this.browser.newContext();
     this.page = await this.context.newPage();
 });
 
-After(async function (this: CustomWorld) {
-    // Test bitince arkamızda çöp bırakmıyoruz (İzolasyon)
-    await this.page?.close();
-    await this.context?.close();
-});
+After(async function (this: CustomWorld, { pickle, result }) {
+    const isApiTest = pickle.tags.some((tag) => tag.name === '@api');
 
-AfterAll(async function () {
-    // Tüm testler bitince tarayıcıyı tamamen kapatıyoruz
-    await browser?.close();
+    // Log the test result
+    console.log(`[INFO] Test completed with status: ${result?.status}`);
+
+    if (isApiTest) {
+        // Nothing to close for API tests since we didn't open a browser here
+        return;
+    }
+
+    // Teardown for UI tests
+    if (this.page) await this.page.close();
+    if (this.context) await this.context.close();
+    if (this.browser) await this.browser.close();
 });

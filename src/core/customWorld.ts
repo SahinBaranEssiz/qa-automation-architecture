@@ -1,5 +1,5 @@
 import { setWorldConstructor, World, IWorldOptions } from "@cucumber/cucumber";
-import { BrowserContext, Page, PlaywrightTestOptions } from "@playwright/test";
+import { Browser, BrowserContext, Page, PlaywrightTestOptions } from "@playwright/test";
 
 export interface CucumberWorldConstructorParams {
     parameters: { [key: string]: string };
@@ -8,6 +8,7 @@ export interface CucumberWorldConstructorParams {
 export class CustomWorld extends World {
     context?: BrowserContext;
     page?: Page;
+    browser?: Browser;
     playwrightOptions?: PlaywrightTestOptions;
     authService?: any;
     userService?: any;
@@ -18,5 +19,4 @@ export class CustomWorld extends World {
     }
 }
 
-// Cucumber'a varsayılan World objesi yerine bizim CustomWorld'ü kullanmasını söylüyoruz
 setWorldConstructor(CustomWorld);
