@@ -11,6 +11,7 @@ export class CustomWorld extends World {
     playwrightOptions?: PlaywrightTestOptions;
     authService?: any;
     userService?: any;
+    productService?: any;
 
     constructor(options: IWorldOptions) {
         super(options);
