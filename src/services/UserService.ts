@@ -10,8 +10,10 @@ export class UserService {
         this.request = request;
     }
 
+    /**
+     * Fetches the current user's profile by injecting the cached access token into the authorization header.
+     */
     async getCurrentUser() {
-        // GET isteğimizi atarken Headers kısmına daha önce hafızaya aldığımız token'ı ekliyoruz
         this.response = await this.request.get(`${this.baseUrl}/auth/me`, {
             headers: {
                 'Authorization': `Bearer ${apiStorage.accessToken}`
@@ -19,10 +21,16 @@ export class UserService {
         });
     }
 
+    /**
+     * Asserts that the HTTP response status code matches the expected value.
+     */
     async verifyStatusCode(expectedStatus: number) {
         expect(this.response.status()).toBe(expectedStatus);
     }
 
+    /**
+     * Verifies that the username in the response body matches the expected user.
+     */
     async verifyUsername(expectedUsername: string) {
         const responseBody = await this.response.json();
         expect(responseBody.username).toBe(expectedUsername);

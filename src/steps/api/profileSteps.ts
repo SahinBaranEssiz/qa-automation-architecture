@@ -5,8 +5,7 @@ import { AuthService, apiStorage } from '../../services/AuthService';
 import { UserService } from '../../services/UserService';
 
 Given('The user has successfully logged in and obtained a token', async function (this: CustomWorld) {
-    // Harika bir QA Pratiği: Eğer token daha önceki bir testten kaldıysa tekrar login olmuyoruz (Zaman tasarrufu).
-    // Ancak bu senaryo tek başına çalıştırılırsa ve token yoksa, arka planda gizlice login olup token'ı alıyoruz.
+    // Fallback: Perform a silent background login if this scenario is executed in isolation without a cached token
     if (!apiStorage.accessToken) {
         const requestContext = await request.newContext();
         const authService = new AuthService(requestContext);
@@ -20,12 +19,9 @@ When('A GET request is sent to the DummyJSON current user endpoint', async funct
     const userService = new UserService(requestContext);
     
     await userService.getCurrentUser();
-    
-    // CustomWorld'e kaydediyoruz ki 'Then' adımlarında bu servise ulaşabilelim
     this.userService = userService; 
 });
 
-// Çakışmayı önlemek için adım metnini "The profile API response..." olarak özelleştirdik
 Then('The profile API response status code should be {int}', async function (this: CustomWorld, statusCode: number) {
     await this.userService.verifyStatusCode(statusCode);
 });

@@ -1,13 +1,11 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import { CustomWorld } from '../../core/customWorld';
-import { LoginPage } from '../../pages/LoginPage';
 import { SignupPage } from '../../pages/SignupPage';
 import { ProductsPage } from '../../pages/ProductsPage';
 import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
 import { CheckoutFlowPage } from '../../pages/CheckoutFlowPage';
 
 Given('The user creates a new dynamic account and logs in', async function (this: CustomWorld) {
-    // We instantiate the SignupPage and call our dynamic registration method
     const signupPage = new SignupPage(this.page!);
     await signupPage.registerDynamicUser();
     
@@ -15,7 +13,7 @@ Given('The user creates a new dynamic account and logs in', async function (this
 });
 
 When('The user navigates to the Products page and searches for {string}', async function (this: CustomWorld, productName: string) {
-    // Navigate to the Products section via URL directly for speed, or by clicking the menu
+    // Direct URL navigation is used here for execution speed
     await this.page?.goto('https://automationexercise.com/products');
     
     const productsPage = new ProductsPage(this.page!);
@@ -43,13 +41,11 @@ When('The user completes the payment process with valid card details', async fun
 });
 
 Then('The system should display the {string} success message', async function (this: CustomWorld, expectedMessage: string) {
-    // We pass the validation to the CheckoutFlowPage to keep assertions out of the step definition
     const checkoutFlowPage = new CheckoutFlowPage(this.page!);
     await checkoutFlowPage.verifyOrderSuccessAndReturnHome();
 });
 
 Then('The user clicks continue to return to the homepage', async function (this: CustomWorld) {
-    // We ensure the URL has changed back to the root (homepage)
     await this.page?.waitForURL('https://automationexercise.com/');
     console.log(`[INFO] E2E Checkout Flow completed successfully. Returned to homepage.`);
 });

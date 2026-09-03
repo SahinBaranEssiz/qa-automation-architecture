@@ -1,14 +1,12 @@
-import { Page } from '@playwright/test';
+import { Page, expect } from '@playwright/test';
 
 export class SignupPage {
     private page: Page;
 
-    // Locators for the Signup/Login page
+    // Locators for user registration and onboarding flow
     private nameInput = 'input[data-qa="signup-name"]';
     private emailInput = 'input[data-qa="signup-email"]';
     private signupButton = 'button[data-qa="signup-button"]';
-
-    // Locators for the Registration Form (Mandatory fields only for speed)
     private passwordInput = 'input[data-qa="password"]';
     private firstNameInput = 'input[data-qa="first_name"]';
     private lastNameInput = 'input[data-qa="last_name"]';
@@ -19,28 +17,71 @@ export class SignupPage {
     private zipcodeInput = 'input[data-qa="zipcode"]';
     private mobileInput = 'input[data-qa="mobile_number"]';
     private createAccountButton = 'button[data-qa="create-account"]';
-    
     private continueButton = '[data-qa="continue-button"]';
+    private accountCreatedHeader = 'h2[data-qa="account-created"]';
 
     constructor(page: Page) {
         this.page = page;
     }
+
+    // ------------------------------------------------------------------
+    // STEP-BY-STEP REGISTRATION METHODS (For Register Feature Assertions)
+    // ------------------------------------------------------------------
+
+    /**
+     * Initiates the signup process by providing a name and email.
+     */
+    async startSignupProcess(name: string, email: string) {
+        await this.page.locator(this.nameInput).fill(name);
+        await this.page.locator(this.emailInput).fill(email);
+        await this.page.locator(this.signupButton).click();
+    }
+
+    /**
+     * Fills the mandatory fields in the detailed account registration form.
+     */
+    async fillAccountDetails(password: string) {
+        await this.page.locator(this.passwordInput).fill(password);
+        await this.page.locator(this.firstNameInput).fill('QA');
+        await this.page.locator(this.lastNameInput).fill('Engineer');
+        await this.page.locator(this.addressInput).fill('123 Automation Avenue');
+        await this.page.locator(this.countrySelect).selectOption('United States');
+        await this.page.locator(this.stateInput).fill('New York');
+        await this.page.locator(this.cityInput).fill('New York');
+        await this.page.locator(this.zipcodeInput).fill('10001');
+        await this.page.locator(this.mobileInput).fill('1234567890');
+        
+        await this.page.locator(this.createAccountButton).click();
+    }
+
+    /**
+     * Verifies that the account creation was successful by checking the success message.
+     */
+    async verifyAccountCreated() {
+        const successMessage = this.page.locator(this.accountCreatedHeader);
+        await expect(successMessage).toBeVisible();
+        await expect(successMessage).toHaveText('Account Created!');
+        
+        // Click continue to bypass the success screen
+        await this.page.locator(this.continueButton).click();
+    }
+
+    // ------------------------------------------------------------------
+    // END-TO-END METHOD (For Checkout Flow)
+    // ------------------------------------------------------------------
 
     /**
      * Registers a completely new user using a unique email address based on the current timestamp.
      * This prevents the "Email already exists" error during repetitive test executions.
      */
     async registerDynamicUser() {
-        // 1. Generate a unique email using JavaScript's Date.now()
         const dynamicEmail = `qa_test_${Date.now()}@automation.com`;
         
-        // 2. Navigate to the login/signup page and start the signup process
         await this.page.goto('https://automationexercise.com/login');
         await this.page.locator(this.nameInput).fill('QA Automation Engineer');
         await this.page.locator(this.emailInput).fill(dynamicEmail);
         await this.page.locator(this.signupButton).click();
 
-        // 3. Fill out the mandatory fields in the registration form
         await this.page.locator(this.passwordInput).fill('SecurePass123!');
         await this.page.locator(this.firstNameInput).fill('QA');
         await this.page.locator(this.lastNameInput).fill('Engineer');
@@ -51,11 +92,9 @@ export class SignupPage {
         await this.page.locator(this.zipcodeInput).fill('10001');
         await this.page.locator(this.mobileInput).fill('1234567890');
         
-        // 4. Submit the form
         await this.page.locator(this.createAccountButton).click();
         console.log(`[INFO] New account created successfully with email: ${dynamicEmail}`);
 
-        // 5. Click continue to bypass the "Account Created" success page
         await this.page.locator(this.continueButton).click();
     }
 }

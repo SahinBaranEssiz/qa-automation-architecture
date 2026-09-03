@@ -3,7 +3,7 @@ import { request } from '@playwright/test';
 import { CustomWorld } from '../../core/customWorld';
 import { AuthService } from '../../services/AuthService';
 
-// Test boyunca kullanılacak geçici kullanıcı verilerini tutuyoruz
+// Temporary payload storage for the current test session
 const apiPayload = {
     username: '',
     password: ''
@@ -17,9 +17,9 @@ Given('The API user has valid credentials {string} and {string}', function (user
 When('A POST request is sent to the DummyJSON login endpoint', async function (this: CustomWorld) {
     const requestContext = await request.newContext();
     const authService = new AuthService(requestContext);
-    
+
     await authService.login(apiPayload.username, apiPayload.password);
-    
+
     this.authService = authService;
 });
 
