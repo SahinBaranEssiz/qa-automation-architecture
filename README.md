@@ -32,8 +32,8 @@ This repository contains a robust, hybrid test automation framework designed for
    
    Please create a `.env` file in the root directory of the project and add the following URLs:
    ```env
-   UI_BASE_URL=[https://automationexercise.com](https://automationexercise.com)
-   API_BASE_URL=[https://dummyjson.com](https://dummyjson.com)
+   UI_BASE_URL=https://automationexercise.com
+   API_BASE_URL=https://dummyjson.com
    ```
 
 ## 🚀 Running the Tests
