@@ -4,7 +4,7 @@
   "description": "Playwright ve Cucumber (BDD) kullanılarak oluşturulmuş, SOLID prensiplerine dayalı uçtan uca (E2E) test otomasyon mimarisi.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cucumber-js"
   },
   "keywords": [],
   "author": "",
