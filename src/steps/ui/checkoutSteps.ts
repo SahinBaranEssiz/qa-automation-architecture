@@ -13,8 +13,8 @@ Given('The user creates a new dynamic account and logs in', async function (this
 });
 
 When('The user navigates to the Products page and searches for {string}', async function (this: CustomWorld, productName: string) {
-    // Direct URL navigation is used here for execution speed
-    await this.page?.goto('https://automationexercise.com/products');
+    // Direct URL navigation is used here for execution speed, utilizing the environment variable
+    await this.page?.goto(`${process.env.UI_BASE_URL}/products`);
     
     const productsPage = new ProductsPage(this.page!);
     await productsPage.searchAndSelectProduct(productName);
@@ -46,6 +46,6 @@ Then('The system should display the {string} success message', async function (t
 });
 
 Then('The user clicks continue to return to the homepage', async function (this: CustomWorld) {
-    await this.page?.waitForURL('https://automationexercise.com/');
+    await this.page?.waitForURL(`${process.env.UI_BASE_URL}/`);
     console.log(`[INFO] E2E Checkout Flow completed successfully. Returned to homepage.`);
 });

@@ -1,6 +1,9 @@
 import { Before, After, setDefaultTimeout } from '@cucumber/cucumber';
 import { chromium } from '@playwright/test';
 import { CustomWorld } from './customWorld';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 setDefaultTimeout(60 * 1000);
 

@@ -2,6 +2,7 @@ import { Page, expect } from '@playwright/test';
 
 export class SignupPage {
     private page: Page;
+    private baseUrl = process.env.UI_BASE_URL as string;
 
     // Locators for user registration and onboarding flow
     private nameInput = 'input[data-qa="signup-name"]';
@@ -77,7 +78,7 @@ export class SignupPage {
     async registerDynamicUser() {
         const dynamicEmail = `qa_test_${Date.now()}@automation.com`;
         
-        await this.page.goto('https://automationexercise.com/login');
+        await this.page.goto(this.baseUrl + '/login');
         await this.page.locator(this.nameInput).fill('QA Automation Engineer');
         await this.page.locator(this.emailInput).fill(dynamicEmail);
         await this.page.locator(this.signupButton).click();

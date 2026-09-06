@@ -8,7 +8,7 @@ export const apiStorage = {
 
 export class AuthService {
     private request: APIRequestContext;
-    private baseUrl = 'https://dummyjson.com';
+    private baseUrl = process.env.API_BASE_URL as string;
     private response!: APIResponse;
 
     constructor(request: APIRequestContext) {

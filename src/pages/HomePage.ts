@@ -5,6 +5,7 @@ export class HomePage {
 
     // Locators for the home page navigation
     private signupLoginLink = 'a[href="/login"]';
+    private baseUrl = process.env.UI_BASE_URL as string;
 
     constructor(page: Page) {
         this.page = page;
@@ -15,7 +16,7 @@ export class HomePage {
      * Includes an explicit 60-second timeout for stable execution in CI/CD environments.
      */
     async navigateToHome() {
-        await this.page.goto('https://automationexercise.com/', { 
+        await this.page.goto(this.baseUrl, { 
             waitUntil: 'domcontentloaded', 
             timeout: 60000 
         });
