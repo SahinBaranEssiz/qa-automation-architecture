@@ -27,4 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Execute Cucumber Tests
+        env:
+          UI_BASE_URL: ${{ secrets.UI_BASE_URL }}
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
         run: npm run test
